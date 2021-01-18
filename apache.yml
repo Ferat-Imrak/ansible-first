@@ -1,0 +1,24 @@
+- name: This sets up an httpd webserver
+  hosts: apache
+  tasks:
+  - name: Install apache packages 
+    yum:
+      name: httpd
+      state: present
+  - name: Download template
+    get_url:
+      url: https://www.free-css.com/assets/files/free-css-templates/download/page261/spicyo.zip
+      dest: /var/www/html
+  - name: Extract file
+    unarchive:
+      src: /var/www/html/spicyo.zip
+      dest: /var/www/html
+      remote_src: yes
+  - name: Move files to current directory
+    shell: mv  /var/www/html/spicyo/*   /var/www/html
+    shell: rm -rf /var/www/html/spicyo
+    shell: rm -rf /var/www/html/spicyo.zip
+  - name: ensure httpd is running
+    service:
+      name: httpd 
+      state: restarted
